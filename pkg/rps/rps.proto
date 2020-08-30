@@ -1,7 +1,7 @@
 syntax = "proto3";
 
-package ssp;
-option go_package = "module github.com/movaua/stone-scissors-paper/pkg/ssp";
+package rps;
+option go_package = "module github.com/movaua/rock-paper-scissors/pkg/rps";
 
 // Gamer is Stone-Scissors-Paper game service.
 service Gamer {

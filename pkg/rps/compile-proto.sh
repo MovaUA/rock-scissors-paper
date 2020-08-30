@@ -18,4 +18,4 @@ protoc \
   --go-grpc_out="${dir}" \
   --go_opt=paths=source_relative \
   --go-grpc_opt=paths=source_relative \
-  "${dir}"/ssp.proto
+  "${dir}"/rps.proto
