@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.23.0
 // 	protoc        v3.13.0
-// source: ssp.proto
+// source: rsp.proto
 
-package ssp
+package rsp
 
 import (
 	proto "github.com/golang/protobuf/proto"
@@ -63,11 +63,11 @@ func (x EnumChoise) String() string {
 }
 
 func (EnumChoise) Descriptor() protoreflect.EnumDescriptor {
-	return file_ssp_proto_enumTypes[0].Descriptor()
+	return file_rsp_proto_enumTypes[0].Descriptor()
 }
 
 func (EnumChoise) Type() protoreflect.EnumType {
-	return &file_ssp_proto_enumTypes[0]
+	return &file_rsp_proto_enumTypes[0]
 }
 
 func (x EnumChoise) Number() protoreflect.EnumNumber {
@@ -76,7 +76,7 @@ func (x EnumChoise) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use EnumChoise.Descriptor instead.
 func (EnumChoise) EnumDescriptor() ([]byte, []int) {
-	return file_ssp_proto_rawDescGZIP(), []int{0}
+	return file_rsp_proto_rawDescGZIP(), []int{0}
 }
 
 // EnumStatus is a player's result of a round or a game.
@@ -116,11 +116,11 @@ func (x EnumStatus) String() string {
 }
 
 func (EnumStatus) Descriptor() protoreflect.EnumDescriptor {
-	return file_ssp_proto_enumTypes[1].Descriptor()
+	return file_rsp_proto_enumTypes[1].Descriptor()
 }
 
 func (EnumStatus) Type() protoreflect.EnumType {
-	return &file_ssp_proto_enumTypes[1]
+	return &file_rsp_proto_enumTypes[1]
 }
 
 func (x EnumStatus) Number() protoreflect.EnumNumber {
@@ -129,7 +129,7 @@ func (x EnumStatus) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use EnumStatus.Descriptor instead.
 func (EnumStatus) EnumDescriptor() ([]byte, []int) {
-	return file_ssp_proto_rawDescGZIP(), []int{1}
+	return file_rsp_proto_rawDescGZIP(), []int{1}
 }
 
 // AuthRequest is a player's authentication requst message.
@@ -145,7 +145,7 @@ type AuthRequest struct {
 func (x *AuthRequest) Reset() {
 	*x = AuthRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_ssp_proto_msgTypes[0]
+		mi := &file_rsp_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -158,7 +158,7 @@ func (x *AuthRequest) String() string {
 func (*AuthRequest) ProtoMessage() {}
 
 func (x *AuthRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_ssp_proto_msgTypes[0]
+	mi := &file_rsp_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -171,7 +171,7 @@ func (x *AuthRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuthRequest.ProtoReflect.Descriptor instead.
 func (*AuthRequest) Descriptor() ([]byte, []int) {
-	return file_ssp_proto_rawDescGZIP(), []int{0}
+	return file_rsp_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *AuthRequest) GetName() string {
@@ -194,7 +194,7 @@ type AuthResponse struct {
 func (x *AuthResponse) Reset() {
 	*x = AuthResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_ssp_proto_msgTypes[1]
+		mi := &file_rsp_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -207,7 +207,7 @@ func (x *AuthResponse) String() string {
 func (*AuthResponse) ProtoMessage() {}
 
 func (x *AuthResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_ssp_proto_msgTypes[1]
+	mi := &file_rsp_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -220,7 +220,7 @@ func (x *AuthResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuthResponse.ProtoReflect.Descriptor instead.
 func (*AuthResponse) Descriptor() ([]byte, []int) {
-	return file_ssp_proto_rawDescGZIP(), []int{1}
+	return file_rsp_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *AuthResponse) GetId() string {
@@ -243,7 +243,7 @@ type ReadyRequest struct {
 func (x *ReadyRequest) Reset() {
 	*x = ReadyRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_ssp_proto_msgTypes[2]
+		mi := &file_rsp_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -256,7 +256,7 @@ func (x *ReadyRequest) String() string {
 func (*ReadyRequest) ProtoMessage() {}
 
 func (x *ReadyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_ssp_proto_msgTypes[2]
+	mi := &file_rsp_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -269,7 +269,7 @@ func (x *ReadyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadyRequest.ProtoReflect.Descriptor instead.
 func (*ReadyRequest) Descriptor() ([]byte, []int) {
-	return file_ssp_proto_rawDescGZIP(), []int{2}
+	return file_rsp_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *ReadyRequest) GetPlayerId() string {
@@ -292,7 +292,7 @@ type ReadyResponse struct {
 func (x *ReadyResponse) Reset() {
 	*x = ReadyResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_ssp_proto_msgTypes[3]
+		mi := &file_rsp_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -305,7 +305,7 @@ func (x *ReadyResponse) String() string {
 func (*ReadyResponse) ProtoMessage() {}
 
 func (x *ReadyResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_ssp_proto_msgTypes[3]
+	mi := &file_rsp_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -318,7 +318,7 @@ func (x *ReadyResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadyResponse.ProtoReflect.Descriptor instead.
 func (*ReadyResponse) Descriptor() ([]byte, []int) {
-	return file_ssp_proto_rawDescGZIP(), []int{3}
+	return file_rsp_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *ReadyResponse) GetChoiseTimeoutSeconds() int32 {
@@ -335,7 +335,7 @@ type Choise struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Choise is a player choise.
-	Choise EnumChoise `protobuf:"varint,1,opt,name=choise,proto3,enum=ssp.EnumChoise" json:"choise,omitempty"`
+	Choise EnumChoise `protobuf:"varint,1,opt,name=choise,proto3,enum=rsp.EnumChoise" json:"choise,omitempty"`
 	// Player who made a choise.
 	PlayerId string `protobuf:"bytes,2,opt,name=player_id,json=playerId,proto3" json:"player_id,omitempty"`
 }
@@ -343,7 +343,7 @@ type Choise struct {
 func (x *Choise) Reset() {
 	*x = Choise{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_ssp_proto_msgTypes[4]
+		mi := &file_rsp_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -356,7 +356,7 @@ func (x *Choise) String() string {
 func (*Choise) ProtoMessage() {}
 
 func (x *Choise) ProtoReflect() protoreflect.Message {
-	mi := &file_ssp_proto_msgTypes[4]
+	mi := &file_rsp_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -369,7 +369,7 @@ func (x *Choise) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Choise.ProtoReflect.Descriptor instead.
 func (*Choise) Descriptor() ([]byte, []int) {
-	return file_ssp_proto_rawDescGZIP(), []int{4}
+	return file_rsp_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *Choise) GetChoise() EnumChoise {
@@ -399,7 +399,7 @@ type Score struct {
 func (x *Score) Reset() {
 	*x = Score{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_ssp_proto_msgTypes[5]
+		mi := &file_rsp_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -412,7 +412,7 @@ func (x *Score) String() string {
 func (*Score) ProtoMessage() {}
 
 func (x *Score) ProtoReflect() protoreflect.Message {
-	mi := &file_ssp_proto_msgTypes[5]
+	mi := &file_rsp_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -425,7 +425,7 @@ func (x *Score) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Score.ProtoReflect.Descriptor instead.
 func (*Score) Descriptor() ([]byte, []int) {
-	return file_ssp_proto_rawDescGZIP(), []int{5}
+	return file_rsp_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *Score) GetRoundResults() []*RoundResult {
@@ -451,15 +451,15 @@ type RoundResult struct {
 	// Player identifies the player who made the choise.
 	Player *Player `protobuf:"bytes,1,opt,name=player,proto3" json:"player,omitempty"`
 	// Choise is the player choise.
-	Choise EnumChoise `protobuf:"varint,2,opt,name=choise,proto3,enum=ssp.EnumChoise" json:"choise,omitempty"`
+	Choise EnumChoise `protobuf:"varint,2,opt,name=choise,proto3,enum=rsp.EnumChoise" json:"choise,omitempty"`
 	// Status is the result of player choise.
-	Status EnumStatus `protobuf:"varint,3,opt,name=status,proto3,enum=ssp.EnumStatus" json:"status,omitempty"`
+	Status EnumStatus `protobuf:"varint,3,opt,name=status,proto3,enum=rsp.EnumStatus" json:"status,omitempty"`
 }
 
 func (x *RoundResult) Reset() {
 	*x = RoundResult{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_ssp_proto_msgTypes[6]
+		mi := &file_rsp_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -472,7 +472,7 @@ func (x *RoundResult) String() string {
 func (*RoundResult) ProtoMessage() {}
 
 func (x *RoundResult) ProtoReflect() protoreflect.Message {
-	mi := &file_ssp_proto_msgTypes[6]
+	mi := &file_rsp_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -485,7 +485,7 @@ func (x *RoundResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RoundResult.ProtoReflect.Descriptor instead.
 func (*RoundResult) Descriptor() ([]byte, []int) {
-	return file_ssp_proto_rawDescGZIP(), []int{6}
+	return file_rsp_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *RoundResult) GetPlayer() *Player {
@@ -524,7 +524,7 @@ type Player struct {
 func (x *Player) Reset() {
 	*x = Player{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_ssp_proto_msgTypes[7]
+		mi := &file_rsp_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -537,7 +537,7 @@ func (x *Player) String() string {
 func (*Player) ProtoMessage() {}
 
 func (x *Player) ProtoReflect() protoreflect.Message {
-	mi := &file_ssp_proto_msgTypes[7]
+	mi := &file_rsp_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -550,7 +550,7 @@ func (x *Player) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Player.ProtoReflect.Descriptor instead.
 func (*Player) Descriptor() ([]byte, []int) {
-	return file_ssp_proto_rawDescGZIP(), []int{7}
+	return file_rsp_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *Player) GetId() string {
@@ -578,7 +578,7 @@ type GameResult struct {
 	// Score is the current score of the player.
 	Score int32 `protobuf:"varint,2,opt,name=score,proto3" json:"score,omitempty"`
 	// Status is the current game status of the player.
-	Status EnumStatus `protobuf:"varint,3,opt,name=status,proto3,enum=ssp.EnumStatus" json:"status,omitempty"`
+	Status EnumStatus `protobuf:"varint,3,opt,name=status,proto3,enum=rsp.EnumStatus" json:"status,omitempty"`
 	// Rounds is the number of completed rounds in the game.
 	Rounds int32 `protobuf:"varint,4,opt,name=rounds,proto3" json:"rounds,omitempty"`
 }
@@ -586,7 +586,7 @@ type GameResult struct {
 func (x *GameResult) Reset() {
 	*x = GameResult{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_ssp_proto_msgTypes[8]
+		mi := &file_rsp_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -599,7 +599,7 @@ func (x *GameResult) String() string {
 func (*GameResult) ProtoMessage() {}
 
 func (x *GameResult) ProtoReflect() protoreflect.Message {
-	mi := &file_ssp_proto_msgTypes[8]
+	mi := &file_rsp_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -612,7 +612,7 @@ func (x *GameResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameResult.ProtoReflect.Descriptor instead.
 func (*GameResult) Descriptor() ([]byte, []int) {
-	return file_ssp_proto_rawDescGZIP(), []int{8}
+	return file_rsp_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *GameResult) GetPlayer() *Player {
@@ -643,10 +643,10 @@ func (x *GameResult) GetRounds() int32 {
 	return 0
 }
 
-var File_ssp_proto protoreflect.FileDescriptor
+var File_rsp_proto protoreflect.FileDescriptor
 
-var file_ssp_proto_rawDesc = []byte{
-	0x0a, 0x09, 0x73, 0x73, 0x70, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x03, 0x73, 0x73, 0x70,
+var file_rsp_proto_rawDesc = []byte{
+	0x0a, 0x09, 0x72, 0x73, 0x70, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x03, 0x72, 0x73, 0x70,
 	0x22, 0x21, 0x0a, 0x0b, 0x41, 0x75, 0x74, 0x68, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
 	0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e,
 	0x61, 0x6d, 0x65, 0x22, 0x1e, 0x0a, 0x0c, 0x41, 0x75, 0x74, 0x68, 0x52, 0x65, 0x73, 0x70, 0x6f,
@@ -660,34 +660,34 @@ var file_ssp_proto_rawDesc = []byte{
 	0x05, 0x52, 0x14, 0x63, 0x68, 0x6f, 0x69, 0x73, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74,
 	0x53, 0x65, 0x63, 0x6f, 0x6e, 0x64, 0x73, 0x22, 0x4e, 0x0a, 0x06, 0x43, 0x68, 0x6f, 0x69, 0x73,
 	0x65, 0x12, 0x27, 0x0a, 0x06, 0x63, 0x68, 0x6f, 0x69, 0x73, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x0e, 0x32, 0x0f, 0x2e, 0x73, 0x73, 0x70, 0x2e, 0x45, 0x6e, 0x75, 0x6d, 0x43, 0x68, 0x6f, 0x69,
+	0x0e, 0x32, 0x0f, 0x2e, 0x72, 0x73, 0x70, 0x2e, 0x45, 0x6e, 0x75, 0x6d, 0x43, 0x68, 0x6f, 0x69,
 	0x73, 0x65, 0x52, 0x06, 0x63, 0x68, 0x6f, 0x69, 0x73, 0x65, 0x12, 0x1b, 0x0a, 0x09, 0x70, 0x6c,
 	0x61, 0x79, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70,
 	0x6c, 0x61, 0x79, 0x65, 0x72, 0x49, 0x64, 0x22, 0x72, 0x0a, 0x05, 0x53, 0x63, 0x6f, 0x72, 0x65,
 	0x12, 0x35, 0x0a, 0x0d, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x5f, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74,
-	0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x10, 0x2e, 0x73, 0x73, 0x70, 0x2e, 0x52, 0x6f,
+	0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x10, 0x2e, 0x72, 0x73, 0x70, 0x2e, 0x52, 0x6f,
 	0x75, 0x6e, 0x64, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x0c, 0x72, 0x6f, 0x75, 0x6e, 0x64,
 	0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x73, 0x12, 0x32, 0x0a, 0x0c, 0x67, 0x61, 0x6d, 0x65, 0x5f,
 	0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0f, 0x2e,
-	0x73, 0x73, 0x70, 0x2e, 0x47, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x0b,
+	0x72, 0x73, 0x70, 0x2e, 0x47, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x0b,
 	0x67, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x73, 0x22, 0x84, 0x01, 0x0a, 0x0b,
 	0x52, 0x6f, 0x75, 0x6e, 0x64, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x23, 0x0a, 0x06, 0x70,
-	0x6c, 0x61, 0x79, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0b, 0x2e, 0x73, 0x73,
+	0x6c, 0x61, 0x79, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0b, 0x2e, 0x72, 0x73,
 	0x70, 0x2e, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x52, 0x06, 0x70, 0x6c, 0x61, 0x79, 0x65, 0x72,
 	0x12, 0x27, 0x0a, 0x06, 0x63, 0x68, 0x6f, 0x69, 0x73, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e,
-	0x32, 0x0f, 0x2e, 0x73, 0x73, 0x70, 0x2e, 0x45, 0x6e, 0x75, 0x6d, 0x43, 0x68, 0x6f, 0x69, 0x73,
+	0x32, 0x0f, 0x2e, 0x72, 0x73, 0x70, 0x2e, 0x45, 0x6e, 0x75, 0x6d, 0x43, 0x68, 0x6f, 0x69, 0x73,
 	0x65, 0x52, 0x06, 0x63, 0x68, 0x6f, 0x69, 0x73, 0x65, 0x12, 0x27, 0x0a, 0x06, 0x73, 0x74, 0x61,
-	0x74, 0x75, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x0f, 0x2e, 0x73, 0x73, 0x70, 0x2e,
+	0x74, 0x75, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x0f, 0x2e, 0x72, 0x73, 0x70, 0x2e,
 	0x45, 0x6e, 0x75, 0x6d, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74,
 	0x75, 0x73, 0x22, 0x2c, 0x0a, 0x06, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x12, 0x0e, 0x0a, 0x02,
 	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04,
 	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65,
 	0x22, 0x88, 0x01, 0x0a, 0x0a, 0x47, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12,
 	0x23, 0x0a, 0x06, 0x70, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32,
-	0x0b, 0x2e, 0x73, 0x73, 0x70, 0x2e, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x52, 0x06, 0x70, 0x6c,
+	0x0b, 0x2e, 0x72, 0x73, 0x70, 0x2e, 0x50, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x52, 0x06, 0x70, 0x6c,
 	0x61, 0x79, 0x65, 0x72, 0x12, 0x14, 0x0a, 0x05, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x18, 0x02, 0x20,
 	0x01, 0x28, 0x05, 0x52, 0x05, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x12, 0x27, 0x0a, 0x06, 0x73, 0x74,
-	0x61, 0x74, 0x75, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x0f, 0x2e, 0x73, 0x73, 0x70,
+	0x61, 0x74, 0x75, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x0f, 0x2e, 0x72, 0x73, 0x70,
 	0x2e, 0x45, 0x6e, 0x75, 0x6d, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61,
 	0x74, 0x75, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x73, 0x18, 0x04, 0x20,
 	0x01, 0x28, 0x05, 0x52, 0x06, 0x72, 0x6f, 0x75, 0x6e, 0x64, 0x73, 0x2a, 0x43, 0x0a, 0x0a, 0x45,
@@ -700,63 +700,63 @@ var file_ssp_proto_rawDesc = []byte{
 	0x00, 0x12, 0x0a, 0x0a, 0x06, 0x57, 0x69, 0x6e, 0x6e, 0x65, 0x72, 0x10, 0x01, 0x12, 0x0a, 0x0a,
 	0x06, 0x4c, 0x6f, 0x6f, 0x73, 0x65, 0x72, 0x10, 0x02, 0x12, 0x08, 0x0a, 0x04, 0x44, 0x72, 0x61,
 	0x77, 0x10, 0x03, 0x32, 0x8f, 0x01, 0x0a, 0x05, 0x47, 0x61, 0x6d, 0x65, 0x72, 0x12, 0x2d, 0x0a,
-	0x04, 0x41, 0x75, 0x74, 0x68, 0x12, 0x10, 0x2e, 0x73, 0x73, 0x70, 0x2e, 0x41, 0x75, 0x74, 0x68,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x11, 0x2e, 0x73, 0x73, 0x70, 0x2e, 0x41, 0x75,
+	0x04, 0x41, 0x75, 0x74, 0x68, 0x12, 0x10, 0x2e, 0x72, 0x73, 0x70, 0x2e, 0x41, 0x75, 0x74, 0x68,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x11, 0x2e, 0x72, 0x73, 0x70, 0x2e, 0x41, 0x75,
 	0x74, 0x68, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x30, 0x0a, 0x05,
-	0x52, 0x65, 0x61, 0x64, 0x79, 0x12, 0x11, 0x2e, 0x73, 0x73, 0x70, 0x2e, 0x52, 0x65, 0x61, 0x64,
-	0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x12, 0x2e, 0x73, 0x73, 0x70, 0x2e, 0x52,
+	0x52, 0x65, 0x61, 0x64, 0x79, 0x12, 0x11, 0x2e, 0x72, 0x73, 0x70, 0x2e, 0x52, 0x65, 0x61, 0x64,
+	0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x12, 0x2e, 0x72, 0x73, 0x70, 0x2e, 0x52,
 	0x65, 0x61, 0x64, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x25,
-	0x0a, 0x04, 0x50, 0x6c, 0x61, 0x79, 0x12, 0x0b, 0x2e, 0x73, 0x73, 0x70, 0x2e, 0x43, 0x68, 0x6f,
-	0x69, 0x73, 0x65, 0x1a, 0x0a, 0x2e, 0x73, 0x73, 0x70, 0x2e, 0x53, 0x63, 0x6f, 0x72, 0x65, 0x22,
-	0x00, 0x28, 0x01, 0x30, 0x01, 0x42, 0x37, 0x5a, 0x35, 0x6d, 0x6f, 0x64, 0x75, 0x6c, 0x65, 0x20,
+	0x0a, 0x04, 0x50, 0x6c, 0x61, 0x79, 0x12, 0x0b, 0x2e, 0x72, 0x73, 0x70, 0x2e, 0x43, 0x68, 0x6f,
+	0x69, 0x73, 0x65, 0x1a, 0x0a, 0x2e, 0x72, 0x73, 0x70, 0x2e, 0x53, 0x63, 0x6f, 0x72, 0x65, 0x22,
+	0x00, 0x28, 0x01, 0x30, 0x01, 0x42, 0x36, 0x5a, 0x34, 0x6d, 0x6f, 0x64, 0x75, 0x6c, 0x65, 0x20,
 	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x6f, 0x76, 0x61, 0x75,
-	0x61, 0x2f, 0x73, 0x74, 0x6f, 0x6e, 0x65, 0x2d, 0x73, 0x63, 0x69, 0x73, 0x73, 0x6f, 0x72, 0x73,
-	0x2d, 0x70, 0x61, 0x70, 0x65, 0x72, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x73, 0x73, 0x70, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x61, 0x2f, 0x72, 0x6f, 0x63, 0x6b, 0x2d, 0x73, 0x63, 0x69, 0x73, 0x73, 0x6f, 0x72, 0x73, 0x2d,
+	0x70, 0x61, 0x70, 0x65, 0x72, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x72, 0x73, 0x70, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
-	file_ssp_proto_rawDescOnce sync.Once
-	file_ssp_proto_rawDescData = file_ssp_proto_rawDesc
+	file_rsp_proto_rawDescOnce sync.Once
+	file_rsp_proto_rawDescData = file_rsp_proto_rawDesc
 )
 
-func file_ssp_proto_rawDescGZIP() []byte {
-	file_ssp_proto_rawDescOnce.Do(func() {
-		file_ssp_proto_rawDescData = protoimpl.X.CompressGZIP(file_ssp_proto_rawDescData)
+func file_rsp_proto_rawDescGZIP() []byte {
+	file_rsp_proto_rawDescOnce.Do(func() {
+		file_rsp_proto_rawDescData = protoimpl.X.CompressGZIP(file_rsp_proto_rawDescData)
 	})
-	return file_ssp_proto_rawDescData
+	return file_rsp_proto_rawDescData
 }
 
-var file_ssp_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_ssp_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
-var file_ssp_proto_goTypes = []interface{}{
-	(EnumChoise)(0),       // 0: ssp.EnumChoise
-	(EnumStatus)(0),       // 1: ssp.EnumStatus
-	(*AuthRequest)(nil),   // 2: ssp.AuthRequest
-	(*AuthResponse)(nil),  // 3: ssp.AuthResponse
-	(*ReadyRequest)(nil),  // 4: ssp.ReadyRequest
-	(*ReadyResponse)(nil), // 5: ssp.ReadyResponse
-	(*Choise)(nil),        // 6: ssp.Choise
-	(*Score)(nil),         // 7: ssp.Score
-	(*RoundResult)(nil),   // 8: ssp.RoundResult
-	(*Player)(nil),        // 9: ssp.Player
-	(*GameResult)(nil),    // 10: ssp.GameResult
+var file_rsp_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_rsp_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_rsp_proto_goTypes = []interface{}{
+	(EnumChoise)(0),       // 0: rsp.EnumChoise
+	(EnumStatus)(0),       // 1: rsp.EnumStatus
+	(*AuthRequest)(nil),   // 2: rsp.AuthRequest
+	(*AuthResponse)(nil),  // 3: rsp.AuthResponse
+	(*ReadyRequest)(nil),  // 4: rsp.ReadyRequest
+	(*ReadyResponse)(nil), // 5: rsp.ReadyResponse
+	(*Choise)(nil),        // 6: rsp.Choise
+	(*Score)(nil),         // 7: rsp.Score
+	(*RoundResult)(nil),   // 8: rsp.RoundResult
+	(*Player)(nil),        // 9: rsp.Player
+	(*GameResult)(nil),    // 10: rsp.GameResult
 }
-var file_ssp_proto_depIdxs = []int32{
-	0,  // 0: ssp.Choise.choise:type_name -> ssp.EnumChoise
-	8,  // 1: ssp.Score.round_results:type_name -> ssp.RoundResult
-	10, // 2: ssp.Score.game_results:type_name -> ssp.GameResult
-	9,  // 3: ssp.RoundResult.player:type_name -> ssp.Player
-	0,  // 4: ssp.RoundResult.choise:type_name -> ssp.EnumChoise
-	1,  // 5: ssp.RoundResult.status:type_name -> ssp.EnumStatus
-	9,  // 6: ssp.GameResult.player:type_name -> ssp.Player
-	1,  // 7: ssp.GameResult.status:type_name -> ssp.EnumStatus
-	2,  // 8: ssp.Gamer.Auth:input_type -> ssp.AuthRequest
-	4,  // 9: ssp.Gamer.Ready:input_type -> ssp.ReadyRequest
-	6,  // 10: ssp.Gamer.Play:input_type -> ssp.Choise
-	3,  // 11: ssp.Gamer.Auth:output_type -> ssp.AuthResponse
-	5,  // 12: ssp.Gamer.Ready:output_type -> ssp.ReadyResponse
-	7,  // 13: ssp.Gamer.Play:output_type -> ssp.Score
+var file_rsp_proto_depIdxs = []int32{
+	0,  // 0: rsp.Choise.choise:type_name -> rsp.EnumChoise
+	8,  // 1: rsp.Score.round_results:type_name -> rsp.RoundResult
+	10, // 2: rsp.Score.game_results:type_name -> rsp.GameResult
+	9,  // 3: rsp.RoundResult.player:type_name -> rsp.Player
+	0,  // 4: rsp.RoundResult.choise:type_name -> rsp.EnumChoise
+	1,  // 5: rsp.RoundResult.status:type_name -> rsp.EnumStatus
+	9,  // 6: rsp.GameResult.player:type_name -> rsp.Player
+	1,  // 7: rsp.GameResult.status:type_name -> rsp.EnumStatus
+	2,  // 8: rsp.Gamer.Auth:input_type -> rsp.AuthRequest
+	4,  // 9: rsp.Gamer.Ready:input_type -> rsp.ReadyRequest
+	6,  // 10: rsp.Gamer.Play:input_type -> rsp.Choise
+	3,  // 11: rsp.Gamer.Auth:output_type -> rsp.AuthResponse
+	5,  // 12: rsp.Gamer.Ready:output_type -> rsp.ReadyResponse
+	7,  // 13: rsp.Gamer.Play:output_type -> rsp.Score
 	11, // [11:14] is the sub-list for method output_type
 	8,  // [8:11] is the sub-list for method input_type
 	8,  // [8:8] is the sub-list for extension type_name
@@ -764,13 +764,13 @@ var file_ssp_proto_depIdxs = []int32{
 	0,  // [0:8] is the sub-list for field type_name
 }
 
-func init() { file_ssp_proto_init() }
-func file_ssp_proto_init() {
-	if File_ssp_proto != nil {
+func init() { file_rsp_proto_init() }
+func file_rsp_proto_init() {
+	if File_rsp_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_ssp_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_rsp_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*AuthRequest); i {
 			case 0:
 				return &v.state
@@ -782,7 +782,7 @@ func file_ssp_proto_init() {
 				return nil
 			}
 		}
-		file_ssp_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_rsp_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*AuthResponse); i {
 			case 0:
 				return &v.state
@@ -794,7 +794,7 @@ func file_ssp_proto_init() {
 				return nil
 			}
 		}
-		file_ssp_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+		file_rsp_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ReadyRequest); i {
 			case 0:
 				return &v.state
@@ -806,7 +806,7 @@ func file_ssp_proto_init() {
 				return nil
 			}
 		}
-		file_ssp_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+		file_rsp_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ReadyResponse); i {
 			case 0:
 				return &v.state
@@ -818,7 +818,7 @@ func file_ssp_proto_init() {
 				return nil
 			}
 		}
-		file_ssp_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+		file_rsp_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Choise); i {
 			case 0:
 				return &v.state
@@ -830,7 +830,7 @@ func file_ssp_proto_init() {
 				return nil
 			}
 		}
-		file_ssp_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+		file_rsp_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Score); i {
 			case 0:
 				return &v.state
@@ -842,7 +842,7 @@ func file_ssp_proto_init() {
 				return nil
 			}
 		}
-		file_ssp_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+		file_rsp_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*RoundResult); i {
 			case 0:
 				return &v.state
@@ -854,7 +854,7 @@ func file_ssp_proto_init() {
 				return nil
 			}
 		}
-		file_ssp_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+		file_rsp_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Player); i {
 			case 0:
 				return &v.state
@@ -866,7 +866,7 @@ func file_ssp_proto_init() {
 				return nil
 			}
 		}
-		file_ssp_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+		file_rsp_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GameResult); i {
 			case 0:
 				return &v.state
@@ -883,19 +883,19 @@ func file_ssp_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_ssp_proto_rawDesc,
+			RawDescriptor: file_rsp_proto_rawDesc,
 			NumEnums:      2,
 			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_ssp_proto_goTypes,
-		DependencyIndexes: file_ssp_proto_depIdxs,
-		EnumInfos:         file_ssp_proto_enumTypes,
-		MessageInfos:      file_ssp_proto_msgTypes,
+		GoTypes:           file_rsp_proto_goTypes,
+		DependencyIndexes: file_rsp_proto_depIdxs,
+		EnumInfos:         file_rsp_proto_enumTypes,
+		MessageInfos:      file_rsp_proto_msgTypes,
 	}.Build()
-	File_ssp_proto = out.File
-	file_ssp_proto_rawDesc = nil
-	file_ssp_proto_goTypes = nil
-	file_ssp_proto_depIdxs = nil
+	File_rsp_proto = out.File
+	file_rsp_proto_rawDesc = nil
+	file_rsp_proto_goTypes = nil
+	file_rsp_proto_depIdxs = nil
 }
