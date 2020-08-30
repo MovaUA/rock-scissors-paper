@@ -1,4 +1,4 @@
-module github.com/movaua/rock-scissors-paper
+module github.com/movaua/rock-paper-scissors
 
 go 1.15
 
