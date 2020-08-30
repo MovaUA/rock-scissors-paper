@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+package ssp;
+option go_package = "module github.com/movaua/stone-scissors-paper/pkg/ssp";
+
+// Gamer is Stone-Scissors-Paper game service.
+service Gamer {
+  // Auth authenticates a player in the game.
+  rpc Auth(AuthRequest) returns (AuthResponse) {}
+
+  // Ready sends a message to server that the player is ready to start the game.
+  rpc Ready(ReadyRequest) returns (ReadyResponse) {}
+
+  // Play starts the game.
+  rpc Play(stream Choise) returns (stream Score) {}
+}
+
+// AuthRequest is a player's authentication requst message.
+message AuthRequest {
+  // Name is a player name.
+  string name = 1;
+}
+
+// AuthResponse is a player's authentication response message.
+message AuthResponse {
+  // Id is a player ID.
+  string id = 1;
+}
+
+// ReadyRequest is a player's ready request.
+message ReadyRequest {
+  // PlayerId is an ID of a player.
+  string player_id = 1;
+}
+
+// ReadyResponse is a player's ready request response.
+message ReadyResponse {
+  // ChoiseTimeoutSeconds is a timeout for player's choise in seconds.
+  int32 choise_timeout_seconds = 1;
+}
+
+// Choise is what a player chose.
+message Choise {
+  // Choise is a player choise.
+  EnumChoise choise = 1;
+  // Player who made a choise.
+  string player_id = 2;
+}
+
+// EnumChoise is possible choise a player can make.
+enum EnumChoise {
+  // Unknow choise means a play did not make a choise in time.
+  UnknownChoise = 0;
+  Stone = 1;
+  Scissors = 2;
+  Paper = 3;
+}
+
+// EnumStatus is a player's result of a round or a game.
+enum EnumStatus {
+  UnknownStatus = 0;
+  Winner = 1;
+  Looser = 2;
+  Draw = 3;
+}
+
+// Score reports the latest round results and the current results of the game.
+message Score {
+  repeated RoundResult round_results = 1;
+  repeated GameResult game_results = 2;
+}
+
+// RoundResult is the latest round result of the player.
+message RoundResult {
+  // Player identifies the player who made the choise.
+  Player player = 1;
+
+  // Choise is the player choise.
+  EnumChoise choise = 2;
+
+  // Status is the result of player choise.
+  EnumStatus status = 3;
+}
+
+// Player decribes a player.
+message Player {
+  // Id is player ID.
+  string id = 1;
+
+  // Name is play name.
+  string name = 2;
+}
+
+// GameResult is the current game result of the player.
+message GameResult {
+  // Player identifies the player for which the result is for.
+  Player player = 1;
+
+  // Score is the current score of the player.
+  int32 score = 2;
+
+  // Status is the current game status of the player.
+  EnumStatus status = 3;
+
+  // Rounds is the number of completed rounds in the game.
+  int32 rounds = 4;
+}
