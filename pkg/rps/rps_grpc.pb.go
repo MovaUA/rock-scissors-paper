@@ -18,9 +18,7 @@ const _ = grpc.SupportPackageIsVersion6
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GamerClient interface {
 	// Auth authenticates a player in the game.
-	Auth(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*AuthResponse, error)
-	// Ready sends a message to server that the player is ready to start the game.
-	Ready(ctx context.Context, in *ReadyRequest, opts ...grpc.CallOption) (*ReadyResponse, error)
+	Auth(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*Player, error)
 	// Play starts the game.
 	Play(ctx context.Context, opts ...grpc.CallOption) (Gamer_PlayClient, error)
 }
@@ -33,18 +31,9 @@ func NewGamerClient(cc grpc.ClientConnInterface) GamerClient {
 	return &gamerClient{cc}
 }
 
-func (c *gamerClient) Auth(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*AuthResponse, error) {
-	out := new(AuthResponse)
+func (c *gamerClient) Auth(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*Player, error) {
+	out := new(Player)
 	err := c.cc.Invoke(ctx, "/rps.Gamer/Auth", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *gamerClient) Ready(ctx context.Context, in *ReadyRequest, opts ...grpc.CallOption) (*ReadyResponse, error) {
-	out := new(ReadyResponse)
-	err := c.cc.Invoke(ctx, "/rps.Gamer/Ready", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -87,9 +76,7 @@ func (x *gamerPlayClient) Recv() (*Score, error) {
 // for forward compatibility
 type GamerServer interface {
 	// Auth authenticates a player in the game.
-	Auth(context.Context, *AuthRequest) (*AuthResponse, error)
-	// Ready sends a message to server that the player is ready to start the game.
-	Ready(context.Context, *ReadyRequest) (*ReadyResponse, error)
+	Auth(context.Context, *AuthRequest) (*Player, error)
 	// Play starts the game.
 	Play(Gamer_PlayServer) error
 	mustEmbedUnimplementedGamerServer()
@@ -99,11 +86,8 @@ type GamerServer interface {
 type UnimplementedGamerServer struct {
 }
 
-func (*UnimplementedGamerServer) Auth(context.Context, *AuthRequest) (*AuthResponse, error) {
+func (*UnimplementedGamerServer) Auth(context.Context, *AuthRequest) (*Player, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Auth not implemented")
-}
-func (*UnimplementedGamerServer) Ready(context.Context, *ReadyRequest) (*ReadyResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Ready not implemented")
 }
 func (*UnimplementedGamerServer) Play(Gamer_PlayServer) error {
 	return status.Errorf(codes.Unimplemented, "method Play not implemented")
@@ -128,24 +112,6 @@ func _Gamer_Auth_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(GamerServer).Auth(ctx, req.(*AuthRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Gamer_Ready_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ReadyRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GamerServer).Ready(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/rps.Gamer/Ready",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GamerServer).Ready(ctx, req.(*ReadyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -183,10 +149,6 @@ var _Gamer_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Auth",
 			Handler:    _Gamer_Auth_Handler,
-		},
-		{
-			MethodName: "Ready",
-			Handler:    _Gamer_Ready_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

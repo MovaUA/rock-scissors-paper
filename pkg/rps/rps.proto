@@ -6,10 +6,7 @@ option go_package = "module github.com/movaua/rock-paper-scissors/pkg/rps";
 // Gamer is Stone-Scissors-Paper game service.
 service Gamer {
   // Auth authenticates a player in the game.
-  rpc Auth(AuthRequest) returns (AuthResponse) {}
-
-  // Ready sends a message to server that the player is ready to start the game.
-  rpc Ready(ReadyRequest) returns (ReadyResponse) {}
+  rpc Auth(AuthRequest) returns (Player) {}
 
   // Play starts the game.
   rpc Play(stream Choise) returns (stream Score) {}
@@ -19,24 +16,6 @@ service Gamer {
 message AuthRequest {
   // Name is a player name.
   string name = 1;
-}
-
-// AuthResponse is a player's authentication response message.
-message AuthResponse {
-  // Id is a player ID.
-  string id = 1;
-}
-
-// ReadyRequest is a player's ready request.
-message ReadyRequest {
-  // PlayerId is an ID of a player.
-  string player_id = 1;
-}
-
-// ReadyResponse is a player's ready request response.
-message ReadyResponse {
-  // ChoiseTimeoutSeconds is a timeout for player's choise in seconds.
-  int32 choise_timeout_seconds = 1;
 }
 
 // Choise is what a player chose.
