@@ -10,9 +10,12 @@ import (
 // game is the server API for the game.
 type game struct {
 	pb.UnimplementedGamerServer
-	ctx                        context.Context
-	roundTimeout               time.Duration
-	started                    bool
+	ctx          context.Context
+	roundTimeout time.Duration
+	started      context.Context // started context is done when the game is started.
+	// start cancels started context,
+	// which causes the game to go into "started" state.
+	start                      func()
 	players                    map[string]*pb.Player // key is player.Id
 	authRequests               chan authRequest
 	getPlayersRequests         chan getPlayersRequest
@@ -22,9 +25,12 @@ type game struct {
 
 // New returns new initialized game server.
 func New(ctx context.Context, roundTimeout time.Duration) pb.GamerServer {
+	started, start := context.WithCancel(context.Background())
 	g := &game{
 		ctx:                        ctx,
 		roundTimeout:               roundTimeout,
+		started:                    started,
+		start:                      start,
 		players:                    make(map[string]*pb.Player, 2),
 		authRequests:               make(chan authRequest),
 		getPlayersRequests:         make(chan getPlayersRequest),
@@ -49,4 +55,9 @@ func (g *game) handleRequests() {
 		case <-g.ctx.Done():
 		}
 	}
+}
+
+// isStarted returns true if the game is in "started" state.
+func (g *game) isStarted() bool {
+	return g.started.Err() != nil
 }

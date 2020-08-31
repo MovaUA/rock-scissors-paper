@@ -38,7 +38,7 @@ func (g *game) handleAuth(r authRequest) {
 		r.res <- authResponse{err: errConnected(r.player.GetName())}
 		return
 	}
-	if g.started {
+	if g.isStarted() {
 		r.res <- authResponse{err: errStarted}
 		return
 	}
@@ -52,6 +52,10 @@ func (g *game) handleAuth(r authRequest) {
 
 	for _, notifyPlayerConnected := range g.notifyPlayerConnectedChans {
 		notifyPlayerConnected <- player
+	}
+
+	if len(g.players) > 1 {
+		g.start()
 	}
 }
 
