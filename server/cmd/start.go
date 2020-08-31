@@ -19,7 +19,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	"context"
 	"fmt"
 	"net"
 	"time"
@@ -66,11 +65,10 @@ func startServer(cmd *cobra.Command, args []string) error {
 	fmt.Printf("listening  %q\n", addr)
 
 	var opts []grpc.ServerOption
-
 	grpcServer := grpc.NewServer(opts...)
 
 	roundTimeout := time.Duration(timeoutSeconds) * time.Second
-	gameServer := server.NewGame(context.TODO(), roundTimeout)
+	gameServer := server.NewGame(cmd.Context(), roundTimeout)
 
 	pb.RegisterGamerServer(grpcServer, gameServer)
 

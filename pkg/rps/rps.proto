@@ -3,19 +3,28 @@ syntax = "proto3";
 package rps;
 option go_package = "module github.com/movaua/rock-paper-scissors/pkg/rps";
 
+import "google/protobuf/empty.proto";
+
 // Gamer is Stone-Scissors-Paper game service.
 service Gamer {
   // Auth authenticates a player in the game.
-  rpc Auth(AuthRequest) returns (Player) {}
+  // Request Player must have Name set (and Id is ignored).
+  // Response Player have the same Name as request Player and assigned Id.
+  rpc Auth(Player) returns (Player) {}
+
+  rpc GetPlayers(google.protobuf.Empty) returns (stream Player) {}
 
   // Play starts the game.
   rpc Play(stream Choise) returns (stream Score) {}
 }
 
-// AuthRequest is a player's authentication requst message.
-message AuthRequest {
-  // Name is a player name.
-  string name = 1;
+// Player decribes a player.
+message Player {
+  // Id is player ID.
+  string id = 1;
+
+  // Name is play name.
+  string name = 2;
 }
 
 // Choise is what a player chose.
@@ -59,15 +68,6 @@ message RoundResult {
 
   // Status is the result of player choise.
   EnumStatus status = 3;
-}
-
-// Player decribes a player.
-message Player {
-  // Id is player ID.
-  string id = 1;
-
-  // Name is play name.
-  string name = 2;
 }
 
 // GameResult is the current game result of the player.

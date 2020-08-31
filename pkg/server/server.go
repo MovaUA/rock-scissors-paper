@@ -10,101 +10,104 @@ import (
 )
 
 var (
-	// ErrStarted happens when an operation is illegal when the game is started.
-	ErrStarted = fmt.Errorf("the game is already started")
+	// errStarted happens when an operation is illegal when the game is already started.
+	errStarted = fmt.Errorf("the game is already started")
+
+	// errEmptyName happens when player with empty name tries to connect.
+	errEmptyName = fmt.Errorf("plaery name is empty")
 )
 
-// Game is the server API for the game.
-type Game struct {
-	pb.UnimplementedGamerServer
-	ctx          context.Context
-	roundTimeout time.Duration
-	started      bool
-	authRequests chan authRequest
-	players      []*pb.Player
+// errConnected happens when a connected player tries to connect again.
+type errConnected string
+
+func (e errConnected) Error() string {
+	return fmt.Sprintf("a player with name %q is already connected to the game", string(e))
 }
 
-// NewGame returns new initialized game.
-func NewGame(ctx context.Context, roundTimeout time.Duration) *Game {
-	g := &Game{
+// NewGame returns new initialized game server.
+func NewGame(ctx context.Context, roundTimeout time.Duration) pb.GamerServer {
+	g := &game{
 		ctx:          ctx,
 		roundTimeout: roundTimeout,
 		authRequests: make(chan authRequest),
+		players:      make(map[string]*pb.Player, 2),
 	}
 	go g.processRequests()
 	return g
 }
 
+// game is the server API for the game.
+type game struct {
+	pb.UnimplementedGamerServer
+	ctx          context.Context
+	roundTimeout time.Duration
+	started      bool
+	authRequests chan authRequest
+	players      map[string]*pb.Player // key is player.Id
+}
+
 // Auth authenticates a player in the game.
-func (g *Game) Auth(ctx context.Context, r *pb.AuthRequest) (*pb.Player, error) {
-	rq := authRequest{rq: r, rs: make(chan authResponse)}
-	g.authRequests <- rq
-	rs := <-rq.rs
-	return rs.player, rs.err
+// Request Player must have Name set (and Id is ignored).
+// Response Player have the same Name as request Player and assigned Id.
+func (g *game) Auth(ctx context.Context, r *pb.Player) (*pb.Player, error) {
+	request := authRequest{player: r, response: make(chan authResponse)}
+	g.authRequests <- request
+	response := <-request.response
+	return response.player, response.err
 }
 
 // Play starts the game.
-func (g *Game) Play(s pb.Gamer_PlayServer) error {
+func (g *game) Play(s pb.Gamer_PlayServer) error {
 	return nil
 }
 
 type authRequest struct {
-	rq *pb.AuthRequest
-	rs chan authResponse
+	player   *pb.Player
+	response chan authResponse
 }
 type authResponse struct {
 	player *pb.Player
 	err    error
 }
 
-func (g *Game) processRequests() {
+func (g *game) processRequests() {
 	for {
 		select {
 		case r := <-g.authRequests:
-			if g.started {
-				r.rs <- authResponse{err: ErrStarted}
-				close(r.rs)
+			if r.player.GetName() == "" {
+				r.response <- authResponse{err: errEmptyName}
+				close(r.response)
 				break
 			}
-			if player := g.findPlayerByName(r.rq.GetName()); player != nil {
-				r.rs <- authResponse{err: ErrAlreadyConnected(r.rq.GetName())}
-				close(r.rs)
+			if player := g.findPlayerByName(r.player.GetName()); player != nil {
+				r.response <- authResponse{err: errConnected(r.player.GetName())}
+				close(r.response)
+				break
+			}
+			if g.started {
+				r.response <- authResponse{err: errStarted}
+				close(r.response)
 				break
 			}
 
 			player := &pb.Player{
 				Id:   uuid.New().String(),
-				Name: r.rq.GetName(),
+				Name: r.player.GetName(),
 			}
-			g.players = append(g.players, player)
-			r.rs <- authResponse{player: player}
-			close(r.rs)
+			g.players[player.Id] = player
+			r.response <- authResponse{player: player}
+			close(r.response)
 
 		case <-g.ctx.Done():
 		}
 	}
 }
 
-func (g *Game) findPlayerByName(name string) *pb.Player {
+func (g *game) findPlayerByName(name string) *pb.Player {
 	for _, player := range g.players {
 		if player.GetName() == name {
 			return player
 		}
 	}
 	return nil
-}
-func (g *Game) findPlayerByID(id string) *pb.Player {
-	for _, player := range g.players {
-		if player.GetId() == id {
-			return player
-		}
-	}
-	return nil
-}
-
-// ErrAlreadyConnected happens when a connected player tries to connect again.
-type ErrAlreadyConnected string
-
-func (e ErrAlreadyConnected) Error() string {
-	return fmt.Sprintf("a player with name %q is already connected to the game", string(e))
 }
