@@ -22,10 +22,10 @@ import (
 	"context"
 	"fmt"
 	"net"
-	"sync"
 	"time"
 
 	pb "github.com/movaua/rock-paper-scissors/pkg/rps"
+	"github.com/movaua/rock-paper-scissors/pkg/server"
 
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
@@ -69,44 +69,10 @@ func startServer(cmd *cobra.Command, args []string) error {
 
 	grpcServer := grpc.NewServer(opts...)
 
-	gameServer := newGameServer(timeoutSeconds)
+	roundTimeout := time.Duration(timeoutSeconds) * time.Second
+	gameServer := server.NewGame(context.TODO(), roundTimeout)
 
 	pb.RegisterGamerServer(grpcServer, gameServer)
 
 	return grpcServer.Serve(lis)
 }
-
-type gameServer struct {
-	pb.UnimplementedGamerServer
-	answerTimeout time.Duration
-	playersMu     sync.Mutex // protects players
-	players       []*pb.Player
-	round         int
-}
-
-func newGameServer(answerTimeoutSeconds int) *gameServer {
-	return &gameServer{
-		answerTimeout: time.Duration(answerTimeoutSeconds) * time.Second,
-	}
-}
-
-func (s *gameServer) Auth(ctx context.Context, r *pb.AuthRequest) (*pb.AuthResponse, error) {
-	s.playersMu.Lock()
-	defer s.playersMu.Unlock()
-
-	player := &pb.Player{
-		Name: r.GetName(),
-		Id:   fmt.Sprintf("%d", len(s.players)+1),
-	}
-
-	s.players = append(s.players, player)
-
-	return &pb.AuthResponse{
-		Id: player.Id,
-	}, nil
-}
-
-func (s *gameServer) Ready(ctx context.Context, r *pb.ReadyRequest) (*pb.ReadyResponse, error) {
-	return nil, nil
-}
-func (s *gameServer) Play(playSrv pb.Gamer_PlayServer) error { return nil }
