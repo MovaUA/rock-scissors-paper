@@ -7,6 +7,19 @@ import (
 	pb "github.com/movaua/rock-paper-scissors/pkg/rps"
 )
 
+// game is the server API for the game.
+type game struct {
+	pb.UnimplementedGamerServer
+	ctx                        context.Context
+	roundTimeout               time.Duration
+	started                    bool
+	players                    map[string]*pb.Player // key is player.Id
+	authRequests               chan authRequest
+	getPlayersRequests         chan getPlayersRequest
+	notifyPlayerConnectedChans map[getPlayersRequest]chan *pb.Player
+	unsubscribeGetPlayers      chan getPlayersRequest
+}
+
 // New returns new initialized game server.
 func New(ctx context.Context, roundTimeout time.Duration) pb.GamerServer {
 	g := &game{
@@ -19,19 +32,6 @@ func New(ctx context.Context, roundTimeout time.Duration) pb.GamerServer {
 	}
 	go g.handleRequests()
 	return g
-}
-
-// game is the server API for the game.
-type game struct {
-	pb.UnimplementedGamerServer
-	ctx                        context.Context
-	roundTimeout               time.Duration
-	started                    bool
-	players                    map[string]*pb.Player // key is player.Id
-	authRequests               chan authRequest
-	getPlayersRequests         chan getPlayersRequest
-	notifyPlayerConnectedChans map[getPlayersRequest]chan *pb.Player
-	unsubscribeGetPlayers      chan getPlayersRequest
 }
 
 func (g *game) handleRequests() {
