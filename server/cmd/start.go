@@ -41,7 +41,7 @@ func init() {
 	rootCmd.AddCommand(startCmd)
 
 	startCmd.Flags().IntVarP(&port, "port", "p", 9090, "game server port")
-	startCmd.Flags().IntVarP(&timeoutSeconds, "timeout", "t", 10, "player answer timeout, seconds")
+	startCmd.Flags().IntVarP(&timeoutSeconds, "timeout", "t", 10, "round timeout, seconds")
 }
 
 var (
@@ -52,7 +52,7 @@ var (
 func startServer(cmd *cobra.Command, args []string) error {
 	// cmd.SilenceUsage = true
 
-	fmt.Printf("Player answer timeout is %d seconds\n", timeoutSeconds)
+	fmt.Printf("Round timeout is %d seconds\n", timeoutSeconds)
 
 	addr := fmt.Sprintf(":%d", port)
 	fmt.Printf("starting game server at %s\n", addr)
