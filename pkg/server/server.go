@@ -129,7 +129,7 @@ func (g *game) findPlayerByName(name string) *pb.Player {
 // GetPlayers streams all connected players
 // and then every new one.
 func (g *game) GetPlayers(e *empty.Empty, stream pb.Gamer_GetPlayersServer) error {
-	playerCh := make(chan *pb.Player, 2)
+	playerCh := make(chan *pb.Player, 1)
 	errCh := make(chan error)
 
 	go func() {
