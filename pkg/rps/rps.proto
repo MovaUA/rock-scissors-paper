@@ -12,6 +12,8 @@ service Gamer {
   // Response Player have the same Name as request Player and assigned Id.
   rpc Auth(Player) returns (Player) {}
 
+  // GetPlayers streams all connected players
+  // and then every new one.
   rpc GetPlayers(google.protobuf.Empty) returns (stream Player) {}
 
   // Play starts the game.

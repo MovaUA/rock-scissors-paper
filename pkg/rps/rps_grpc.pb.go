@@ -22,6 +22,8 @@ type GamerClient interface {
 	// Request Player must have Name set (and Id is ignored).
 	// Response Player have the same Name as request Player and assigned Id.
 	Auth(ctx context.Context, in *Player, opts ...grpc.CallOption) (*Player, error)
+	// GetPlayers streams all connected players
+	// and then every new one.
 	GetPlayers(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (Gamer_GetPlayersClient, error)
 	// Play starts the game.
 	Play(ctx context.Context, opts ...grpc.CallOption) (Gamer_PlayClient, error)
@@ -115,6 +117,8 @@ type GamerServer interface {
 	// Request Player must have Name set (and Id is ignored).
 	// Response Player have the same Name as request Player and assigned Id.
 	Auth(context.Context, *Player) (*Player, error)
+	// GetPlayers streams all connected players
+	// and then every new one.
 	GetPlayers(*empty.Empty, Gamer_GetPlayersServer) error
 	// Play starts the game.
 	Play(Gamer_PlayServer) error
