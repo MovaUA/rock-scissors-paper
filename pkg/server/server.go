@@ -18,9 +18,9 @@ type game struct {
 	start                      func()
 	players                    map[string]*pb.Player // key is player.Id
 	authRequests               chan authRequest
-	getPlayersRequests         chan getPlayersRequest
-	notifyPlayerConnectedChans map[getPlayersRequest]chan *pb.Player
-	unsubscribeGetPlayers      chan getPlayersRequest
+	playersRequests            chan playersRequest
+	notifyPlayerConnectedChans map[playersRequest]chan *pb.Player
+	unsubscribePlayers         chan playersRequest
 	// round is the current round of the game when it is started.
 	// round is nil until the game is started.ß
 	round *round
@@ -36,8 +36,9 @@ func New(ctx context.Context, roundTimeout time.Duration) pb.GameServer {
 		started:                    started,
 		players:                    make(map[string]*pb.Player, 2),
 		authRequests:               make(chan authRequest),
-		getPlayersRequests:         make(chan getPlayersRequest),
-		notifyPlayerConnectedChans: make(map[getPlayersRequest]chan *pb.Player, 2),
+		playersRequests:            make(chan playersRequest),
+		notifyPlayerConnectedChans: make(map[playersRequest]chan *pb.Player, 2),
+		unsubscribePlayers:         make(chan playersRequest),
 	}
 
 	g.start = func() {
@@ -56,10 +57,10 @@ func (g *game) handleRequests() {
 		case r := <-g.authRequests:
 			g.handleAuth(r)
 
-		case r := <-g.getPlayersRequests:
-			g.handleGetPlayers(r)
+		case r := <-g.playersRequests:
+			g.handlePlayers(r)
 
-		case r := <-g.unsubscribeGetPlayers:
+		case r := <-g.unsubscribePlayers:
 			delete(g.notifyPlayerConnectedChans, r)
 
 		case <-g.ctx.Done():

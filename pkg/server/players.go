@@ -5,9 +5,9 @@ import (
 	pb "github.com/movaua/rock-paper-scissors/pkg/rps"
 )
 
-// GetPlayers streams all connected players
-// and then every new one.
-func (g *game) GetPlayers(_ *empty.Empty, stream pb.Game_PlayersServer) error {
+// Players streams all connected players,
+// and all players which connect later.
+func (g *game) Players(_ *empty.Empty, stream pb.Game_PlayersServer) error {
 	playerCh := make(chan *pb.Player, 1)
 	errCh := make(chan error)
 
@@ -26,22 +26,22 @@ func (g *game) GetPlayers(_ *empty.Empty, stream pb.Game_PlayersServer) error {
 		}
 	}()
 
-	r := getPlayersRequest{playerCh: playerCh}
+	r := playersRequest{playerCh: playerCh}
 
-	g.getPlayersRequests <- r
+	g.playersRequests <- r
 
 	err := <-errCh
 
-	g.unsubscribeGetPlayers <- r
+	g.unsubscribePlayers <- r
 
 	return err
 }
 
-type getPlayersRequest struct {
+type playersRequest struct {
 	playerCh chan *pb.Player
 }
 
-func (g *game) handleGetPlayers(r getPlayersRequest) {
+func (g *game) handlePlayers(r playersRequest) {
 	for _, p := range g.players {
 		r.playerCh <- p
 	}
