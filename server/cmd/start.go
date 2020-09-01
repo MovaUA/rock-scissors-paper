@@ -70,7 +70,7 @@ func startServer(cmd *cobra.Command, args []string) error {
 	roundTimeout := time.Duration(timeoutSeconds) * time.Second
 	gameServer := server.New(cmd.Context(), roundTimeout)
 
-	pb.RegisterGamerServer(grpcServer, gameServer)
+	pb.RegisterGameServer(grpcServer, gameServer)
 
 	return grpcServer.Serve(lis)
 }

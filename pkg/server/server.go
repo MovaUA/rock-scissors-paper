@@ -9,7 +9,7 @@ import (
 
 // game is the server API for the game.
 type game struct {
-	pb.UnimplementedGamerServer
+	pb.UnimplementedGameServer
 	ctx          context.Context
 	roundTimeout time.Duration
 	started      context.Context // started context is done when the game is started.
@@ -21,22 +21,32 @@ type game struct {
 	getPlayersRequests         chan getPlayersRequest
 	notifyPlayerConnectedChans map[getPlayersRequest]chan *pb.Player
 	unsubscribeGetPlayers      chan getPlayersRequest
+	// round is the current round of the game when it is started.
+	// round is nil until the game is started.ß
+	round *round
 }
 
 // New returns new initialized game server.
-func New(ctx context.Context, roundTimeout time.Duration) pb.GamerServer {
+func New(ctx context.Context, roundTimeout time.Duration) pb.GameServer {
 	started, start := context.WithCancel(context.Background())
+
 	g := &game{
 		ctx:                        ctx,
 		roundTimeout:               roundTimeout,
 		started:                    started,
-		start:                      start,
 		players:                    make(map[string]*pb.Player, 2),
 		authRequests:               make(chan authRequest),
 		getPlayersRequests:         make(chan getPlayersRequest),
 		notifyPlayerConnectedChans: make(map[getPlayersRequest]chan *pb.Player, 2),
 	}
+
+	g.start = func() {
+		g.round = newRound(g.ctx, g.roundTimeout, g.players)
+		start()
+	}
+
 	go g.handleRequests()
+
 	return g
 }
 

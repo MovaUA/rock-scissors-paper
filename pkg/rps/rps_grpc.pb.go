@@ -14,44 +14,44 @@ import (
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion6
 
-// GamerClient is the client API for Gamer service.
+// GameClient is the client API for Game service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type GamerClient interface {
-	// Auth authenticates a player in the game.
-	// Request Player must have Name set (and Id is ignored).
-	// Response Player have the same Name as request Player and assigned Id.
-	Auth(ctx context.Context, in *Player, opts ...grpc.CallOption) (*Player, error)
-	// GetPlayers streams all connected players
-	// and then every new one.
-	GetPlayers(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (Gamer_GetPlayersClient, error)
-	// Play starts the game.
-	Play(ctx context.Context, opts ...grpc.CallOption) (Gamer_PlayClient, error)
+type GameClient interface {
+	// Connect connects a player to the game.
+	// Request Player must have Name set (Id is ignored).
+	// Response Player is assigned Id.
+	Connect(ctx context.Context, in *Player, opts ...grpc.CallOption) (*Player, error)
+	// Players streams all connected players,
+	// and all players which connect later.
+	Players(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (Game_PlayersClient, error)
+	// Start starts the game.
+	Start(ctx context.Context, opts ...grpc.CallOption) (Game_StartClient, error)
 }
 
-type gamerClient struct {
+type gameClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewGamerClient(cc grpc.ClientConnInterface) GamerClient {
-	return &gamerClient{cc}
+func NewGameClient(cc grpc.ClientConnInterface) GameClient {
+	return &gameClient{cc}
 }
 
-func (c *gamerClient) Auth(ctx context.Context, in *Player, opts ...grpc.CallOption) (*Player, error) {
+func (c *gameClient) Connect(ctx context.Context, in *Player, opts ...grpc.CallOption) (*Player, error) {
 	out := new(Player)
-	err := c.cc.Invoke(ctx, "/rps.Gamer/Auth", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/rps.Game/Connect", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *gamerClient) GetPlayers(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (Gamer_GetPlayersClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_Gamer_serviceDesc.Streams[0], "/rps.Gamer/GetPlayers", opts...)
+func (c *gameClient) Players(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (Game_PlayersClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Game_serviceDesc.Streams[0], "/rps.Game/Players", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &gamerGetPlayersClient{stream}
+	x := &gamePlayersClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -61,16 +61,16 @@ func (c *gamerClient) GetPlayers(ctx context.Context, in *empty.Empty, opts ...g
 	return x, nil
 }
 
-type Gamer_GetPlayersClient interface {
+type Game_PlayersClient interface {
 	Recv() (*Player, error)
 	grpc.ClientStream
 }
 
-type gamerGetPlayersClient struct {
+type gamePlayersClient struct {
 	grpc.ClientStream
 }
 
-func (x *gamerGetPlayersClient) Recv() (*Player, error) {
+func (x *gamePlayersClient) Recv() (*Player, error) {
 	m := new(Player)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -78,30 +78,30 @@ func (x *gamerGetPlayersClient) Recv() (*Player, error) {
 	return m, nil
 }
 
-func (c *gamerClient) Play(ctx context.Context, opts ...grpc.CallOption) (Gamer_PlayClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_Gamer_serviceDesc.Streams[1], "/rps.Gamer/Play", opts...)
+func (c *gameClient) Start(ctx context.Context, opts ...grpc.CallOption) (Game_StartClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Game_serviceDesc.Streams[1], "/rps.Game/Start", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &gamerPlayClient{stream}
+	x := &gameStartClient{stream}
 	return x, nil
 }
 
-type Gamer_PlayClient interface {
-	Send(*Choise) error
+type Game_StartClient interface {
+	Send(*Choice) error
 	Recv() (*Score, error)
 	grpc.ClientStream
 }
 
-type gamerPlayClient struct {
+type gameStartClient struct {
 	grpc.ClientStream
 }
 
-func (x *gamerPlayClient) Send(m *Choise) error {
+func (x *gameStartClient) Send(m *Choice) error {
 	return x.ClientStream.SendMsg(m)
 }
 
-func (x *gamerPlayClient) Recv() (*Score, error) {
+func (x *gameStartClient) Recv() (*Score, error) {
 	m := new(Score)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -109,124 +109,124 @@ func (x *gamerPlayClient) Recv() (*Score, error) {
 	return m, nil
 }
 
-// GamerServer is the server API for Gamer service.
-// All implementations must embed UnimplementedGamerServer
+// GameServer is the server API for Game service.
+// All implementations must embed UnimplementedGameServer
 // for forward compatibility
-type GamerServer interface {
-	// Auth authenticates a player in the game.
-	// Request Player must have Name set (and Id is ignored).
-	// Response Player have the same Name as request Player and assigned Id.
-	Auth(context.Context, *Player) (*Player, error)
-	// GetPlayers streams all connected players
-	// and then every new one.
-	GetPlayers(*empty.Empty, Gamer_GetPlayersServer) error
-	// Play starts the game.
-	Play(Gamer_PlayServer) error
-	mustEmbedUnimplementedGamerServer()
+type GameServer interface {
+	// Connect connects a player to the game.
+	// Request Player must have Name set (Id is ignored).
+	// Response Player is assigned Id.
+	Connect(context.Context, *Player) (*Player, error)
+	// Players streams all connected players,
+	// and all players which connect later.
+	Players(*empty.Empty, Game_PlayersServer) error
+	// Start starts the game.
+	Start(Game_StartServer) error
+	mustEmbedUnimplementedGameServer()
 }
 
-// UnimplementedGamerServer must be embedded to have forward compatible implementations.
-type UnimplementedGamerServer struct {
+// UnimplementedGameServer must be embedded to have forward compatible implementations.
+type UnimplementedGameServer struct {
 }
 
-func (*UnimplementedGamerServer) Auth(context.Context, *Player) (*Player, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Auth not implemented")
+func (*UnimplementedGameServer) Connect(context.Context, *Player) (*Player, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Connect not implemented")
 }
-func (*UnimplementedGamerServer) GetPlayers(*empty.Empty, Gamer_GetPlayersServer) error {
-	return status.Errorf(codes.Unimplemented, "method GetPlayers not implemented")
+func (*UnimplementedGameServer) Players(*empty.Empty, Game_PlayersServer) error {
+	return status.Errorf(codes.Unimplemented, "method Players not implemented")
 }
-func (*UnimplementedGamerServer) Play(Gamer_PlayServer) error {
-	return status.Errorf(codes.Unimplemented, "method Play not implemented")
+func (*UnimplementedGameServer) Start(Game_StartServer) error {
+	return status.Errorf(codes.Unimplemented, "method Start not implemented")
 }
-func (*UnimplementedGamerServer) mustEmbedUnimplementedGamerServer() {}
+func (*UnimplementedGameServer) mustEmbedUnimplementedGameServer() {}
 
-func RegisterGamerServer(s *grpc.Server, srv GamerServer) {
-	s.RegisterService(&_Gamer_serviceDesc, srv)
+func RegisterGameServer(s *grpc.Server, srv GameServer) {
+	s.RegisterService(&_Game_serviceDesc, srv)
 }
 
-func _Gamer_Auth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Game_Connect_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Player)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GamerServer).Auth(ctx, in)
+		return srv.(GameServer).Connect(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/rps.Gamer/Auth",
+		FullMethod: "/rps.Game/Connect",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GamerServer).Auth(ctx, req.(*Player))
+		return srv.(GameServer).Connect(ctx, req.(*Player))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Gamer_GetPlayers_Handler(srv interface{}, stream grpc.ServerStream) error {
+func _Game_Players_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(empty.Empty)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(GamerServer).GetPlayers(m, &gamerGetPlayersServer{stream})
+	return srv.(GameServer).Players(m, &gamePlayersServer{stream})
 }
 
-type Gamer_GetPlayersServer interface {
+type Game_PlayersServer interface {
 	Send(*Player) error
 	grpc.ServerStream
 }
 
-type gamerGetPlayersServer struct {
+type gamePlayersServer struct {
 	grpc.ServerStream
 }
 
-func (x *gamerGetPlayersServer) Send(m *Player) error {
+func (x *gamePlayersServer) Send(m *Player) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func _Gamer_Play_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(GamerServer).Play(&gamerPlayServer{stream})
+func _Game_Start_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(GameServer).Start(&gameStartServer{stream})
 }
 
-type Gamer_PlayServer interface {
+type Game_StartServer interface {
 	Send(*Score) error
-	Recv() (*Choise, error)
+	Recv() (*Choice, error)
 	grpc.ServerStream
 }
 
-type gamerPlayServer struct {
+type gameStartServer struct {
 	grpc.ServerStream
 }
 
-func (x *gamerPlayServer) Send(m *Score) error {
+func (x *gameStartServer) Send(m *Score) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func (x *gamerPlayServer) Recv() (*Choise, error) {
-	m := new(Choise)
+func (x *gameStartServer) Recv() (*Choice, error) {
+	m := new(Choice)
 	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
 	return m, nil
 }
 
-var _Gamer_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "rps.Gamer",
-	HandlerType: (*GamerServer)(nil),
+var _Game_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "rps.Game",
+	HandlerType: (*GameServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Auth",
-			Handler:    _Gamer_Auth_Handler,
+			MethodName: "Connect",
+			Handler:    _Game_Connect_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "GetPlayers",
-			Handler:       _Gamer_GetPlayers_Handler,
+			StreamName:    "Players",
+			Handler:       _Game_Players_Handler,
 			ServerStreams: true,
 		},
 		{
-			StreamName:    "Play",
-			Handler:       _Gamer_Play_Handler,
+			StreamName:    "Start",
+			Handler:       _Game_Start_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},

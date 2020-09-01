@@ -7,10 +7,10 @@ import (
 	pb "github.com/movaua/rock-paper-scissors/pkg/rps"
 )
 
-// Auth authenticates a player in the game.
-// Request Player must have Name set (and Id is ignored).
-// Response Player have the same Name as request Player and assigned Id.
-func (g *game) Auth(ctx context.Context, p *pb.Player) (*pb.Player, error) {
+// Connect connects a player to the game.
+// Request Player must have Name set (Id is ignored).
+// Response Player is assigned Id.
+func (g *game) Connect(ctx context.Context, p *pb.Player) (*pb.Player, error) {
 	r := authRequest{player: p, res: make(chan authResponse)}
 	g.authRequests <- r
 	res := <-r.res
