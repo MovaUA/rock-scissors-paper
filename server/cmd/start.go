@@ -33,7 +33,7 @@ import (
 // startCmd represents the start command
 var startCmd = &cobra.Command{
 	Use:   "start",
-	Short: "Starts Rock Paper Scissoers game server",
+	Short: "Starts Rock Paper Scissors game server",
 	RunE:  startServer,
 }
 
