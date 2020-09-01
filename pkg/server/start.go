@@ -4,7 +4,7 @@ import (
 	pb "github.com/movaua/rock-paper-scissors/pkg/rps"
 )
 
-// Play starts the game.
+// Start starts the game.
 func (g *Game) Start(stream pb.Game_StartServer) error {
 	// wait for the game is started
 	<-g.started.Done()
