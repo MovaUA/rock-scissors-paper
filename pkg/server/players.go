@@ -7,7 +7,7 @@ import (
 
 // Players streams all connected players,
 // and all players which connect later.
-func (g *game) Players(_ *empty.Empty, stream pb.Game_PlayersServer) error {
+func (g *Game) Players(_ *empty.Empty, stream pb.Game_PlayersServer) error {
 	playerCh := make(chan *pb.Player, 1)
 	errCh := make(chan error)
 
@@ -41,7 +41,7 @@ type playersRequest struct {
 	playerCh chan *pb.Player
 }
 
-func (g *game) handlePlayers(r playersRequest) {
+func (g *Game) handlePlayers(r playersRequest) {
 	for _, p := range g.players {
 		r.playerCh <- p
 	}

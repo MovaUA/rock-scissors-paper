@@ -8,8 +8,8 @@ import (
 	pb "github.com/movaua/rock-paper-scissors/pkg/rps"
 )
 
-// round is an API of a single round of the game.
-type round struct {
+// Round is an API of a single Round of the game.
+type Round struct {
 	ctx       context.Context
 	cancel    func()
 	players   map[string]*pb.Player // key is player.Id
@@ -18,15 +18,15 @@ type round struct {
 	resultsCh chan []*pb.RoundResult
 }
 
-// newRound return new started round of the game.
-func newRound(
+// NewRound return new started round of the game.
+func NewRound(
 	ctx context.Context,
 	timeout time.Duration,
 	players map[string]*pb.Player,
-) *round {
+) *Round {
 	ctx, cancel := context.WithTimeout(ctx, timeout)
 
-	r := &round{
+	r := &Round{
 		ctx:       ctx,
 		cancel:    cancel,
 		players:   players,
@@ -41,13 +41,18 @@ func newRound(
 }
 
 // MakeChoise accepts a player's choise.
-func (r *round) MakeChoise(c *pb.Choice) {
+func (r *Round) MakeChoise(c *pb.Choice) {
 	r.choicesCh <- c
+}
+
+// Result returns a chan with round results.
+func (r *Round) Result() <-chan []*pb.RoundResult {
+	return r.resultsCh
 }
 
 // start waits for all players made their choises or round is timed out.
 // Then it reports the result back to game.
-func (r *round) start() {
+func (r *Round) start() {
 	defer r.cancel()
 
 	r.handleChoises()
@@ -58,7 +63,7 @@ func (r *round) start() {
 
 // handleChoises returns when all players have made their choises
 // or when timeout is expired.
-func (r *round) handleChoises() {
+func (r *Round) handleChoises() {
 	for {
 		select {
 
@@ -80,14 +85,27 @@ func (r *round) handleChoises() {
 	}
 }
 
-func (r *round) getResults() []*pb.RoundResult {
-	results := make([]*pb.RoundResult, len(r.players))
+func (r *Round) getResults() []*pb.RoundResult {
+	// calculate score
+	results := r.scoreResults()
 
-	playerScores := make([]playerScore, len(r.players))
+	// sort ascending by score
+	sort.Slice(results, func(i, j int) bool {
+		return results[i].Score < results[j].Score
+	})
+
+	// calculate status
+	SetRoundStatuses(results)
+
+	return results
+}
+
+func (r *Round) scoreResults() []*pb.RoundResult {
+	scores := make([]*pb.RoundResult, len(r.players))
 
 	for _, player := range r.players {
-		playerChoice := r.choices[player.GetId()].GetChoice()
-		score := 0
+		choice := r.choices[player.GetId()].GetChoice()
+		score := int32(0)
 
 		for _, otherPlayer := range r.players {
 			if otherPlayer.GetId() == player.GetId() {
@@ -95,66 +113,18 @@ func (r *round) getResults() []*pb.RoundResult {
 			}
 
 			otherPlayerChoice := r.choices[otherPlayer.GetId()].GetChoice()
-			status := compareChoises(playerChoice, otherPlayerChoice)
+			status := GetStatus(choice, otherPlayerChoice)
 
-			score += statusScore[status]
+			score += statusScores[status]
 		}
 
-		playerScores = append(playerScores,
-			playerScore{
-				player: player,
-				choice: playerChoice,
-				score:  score,
+		scores = append(scores,
+			&pb.RoundResult{
+				Player: player,
+				Choice: choice,
+				Score:  score,
 			})
 	}
 
-	sort.Slice(playerScores, func(i, j int) bool {
-		return playerScores[i].score < playerScores[j].score
-	})
-
-	return results
-}
-
-type playerScore struct {
-	player *pb.Player
-	choice pb.EnumChoice
-	score  int
-}
-
-var (
-	gameItems = map[pb.EnumChoice]gameItem{
-		pb.EnumChoice_Rock:     {strongTo: pb.EnumChoice_Scissors, weakTo: pb.EnumChoice_Paper},
-		pb.EnumChoice_Paper:    {strongTo: pb.EnumChoice_Rock, weakTo: pb.EnumChoice_Scissors},
-		pb.EnumChoice_Scissors: {strongTo: pb.EnumChoice_Paper, weakTo: pb.EnumChoice_Rock},
-	}
-
-	statusScore = map[pb.EnumStatus]int{
-		pb.EnumStatus_UnknownStatus: 0,
-		pb.EnumStatus_Looser:        0,
-		pb.EnumStatus_Draw:          1,
-		pb.EnumStatus_Winner:        2,
-	}
-)
-
-type gameItem struct {
-	strongTo pb.EnumChoice
-	weakTo   pb.EnumChoice
-}
-
-func compareChoises(playerChoice pb.EnumChoice, otherPlayerChoice pb.EnumChoice) pb.EnumStatus {
-	if playerChoice == pb.EnumChoice_UnknownChoice || otherPlayerChoice == pb.EnumChoice_UnknownChoice {
-		return pb.EnumStatus_UnknownStatus
-	}
-	if gameItems[playerChoice].strongTo == otherPlayerChoice {
-		return pb.EnumStatus_Winner
-	}
-	if gameItems[playerChoice].weakTo == otherPlayerChoice {
-		return pb.EnumStatus_Looser
-	}
-	return pb.EnumStatus_Draw
-}
-
-// Result returns a chan with round results.
-func (r *round) Result() <-chan []*pb.RoundResult {
-	return r.resultsCh
+	return scores
 }

@@ -10,7 +10,7 @@ import (
 // Connect connects a player to the game.
 // Request Player must have Name set (Id is ignored).
 // Response Player is assigned Id.
-func (g *game) Connect(ctx context.Context, p *pb.Player) (*pb.Player, error) {
+func (g *Game) Connect(ctx context.Context, p *pb.Player) (*pb.Player, error) {
 	r := connectRequest{player: p, res: make(chan connectResponse)}
 	g.connectRequests <- r
 	res := <-r.res
@@ -27,7 +27,7 @@ type connectResponse struct {
 	err    error
 }
 
-func (g *game) handleConnect(r connectRequest) {
+func (g *Game) handleConnect(r connectRequest) {
 	defer close(r.res)
 
 	if r.player.GetName() == "" {
@@ -59,7 +59,7 @@ func (g *game) handleConnect(r connectRequest) {
 	}
 }
 
-func (g *game) findPlayerByName(name string) *pb.Player {
+func (g *Game) findPlayerByName(name string) *pb.Player {
 	for _, player := range g.players {
 		if player.GetName() == name {
 			return player

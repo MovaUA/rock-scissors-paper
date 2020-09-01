@@ -5,7 +5,7 @@ import (
 )
 
 // Play starts the game.
-func (g *game) Start(stream pb.Game_StartServer) error {
+func (g *Game) Start(stream pb.Game_StartServer) error {
 	// wait for the game is started
 	<-g.started.Done()
 

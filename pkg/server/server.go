@@ -7,8 +7,9 @@ import (
 	pb "github.com/movaua/rock-paper-scissors/pkg/rps"
 )
 
-// game is the server API for the game.
-type game struct {
+// Game is the server API for the Game.
+// It implements pb.GameServer.
+type Game struct {
 	pb.UnimplementedGameServer
 	ctx          context.Context
 	roundTimeout time.Duration
@@ -23,14 +24,14 @@ type game struct {
 	unsubscribePlayers         chan playersRequest
 	// round is the current round of the game when it is started.
 	// round is nil until the game is started.ß
-	round *round
+	round *Round
 }
 
-// New returns new initialized game server.
-func New(ctx context.Context, roundTimeout time.Duration) pb.GameServer {
+// NewGame returns new initialized game server.
+func NewGame(ctx context.Context, roundTimeout time.Duration) *Game {
 	started, start := context.WithCancel(context.Background())
 
-	g := &game{
+	g := &Game{
 		ctx:                        ctx,
 		roundTimeout:               roundTimeout,
 		started:                    started,
@@ -42,7 +43,7 @@ func New(ctx context.Context, roundTimeout time.Duration) pb.GameServer {
 	}
 
 	g.start = func() {
-		g.round = newRound(g.ctx, g.roundTimeout, g.players)
+		g.round = NewRound(g.ctx, g.roundTimeout, g.players)
 		start()
 	}
 
@@ -51,7 +52,7 @@ func New(ctx context.Context, roundTimeout time.Duration) pb.GameServer {
 	return g
 }
 
-func (g *game) handleRequests() {
+func (g *Game) handleRequests() {
 	for {
 		select {
 		case r := <-g.connectRequests:
@@ -69,6 +70,6 @@ func (g *game) handleRequests() {
 }
 
 // isStarted returns true if the game is in "started" state.
-func (g *game) isStarted() bool {
+func (g *Game) isStarted() bool {
 	return g.started.Err() != nil
 }
