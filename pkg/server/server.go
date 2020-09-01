@@ -17,7 +17,7 @@ type game struct {
 	// which causes the game to go into "started" state.
 	start                      func()
 	players                    map[string]*pb.Player // key is player.Id
-	authRequests               chan authRequest
+	connectRequests            chan connectRequest
 	playersRequests            chan playersRequest
 	notifyPlayerConnectedChans map[playersRequest]chan *pb.Player
 	unsubscribePlayers         chan playersRequest
@@ -35,7 +35,7 @@ func New(ctx context.Context, roundTimeout time.Duration) pb.GameServer {
 		roundTimeout:               roundTimeout,
 		started:                    started,
 		players:                    make(map[string]*pb.Player, 2),
-		authRequests:               make(chan authRequest),
+		connectRequests:            make(chan connectRequest),
 		playersRequests:            make(chan playersRequest),
 		notifyPlayerConnectedChans: make(map[playersRequest]chan *pb.Player, 2),
 		unsubscribePlayers:         make(chan playersRequest),
@@ -54,8 +54,8 @@ func New(ctx context.Context, roundTimeout time.Duration) pb.GameServer {
 func (g *game) handleRequests() {
 	for {
 		select {
-		case r := <-g.authRequests:
-			g.handleAuth(r)
+		case r := <-g.connectRequests:
+			g.handleConnect(r)
 
 		case r := <-g.playersRequests:
 			g.handlePlayers(r)

@@ -11,35 +11,35 @@ import (
 // Request Player must have Name set (Id is ignored).
 // Response Player is assigned Id.
 func (g *game) Connect(ctx context.Context, p *pb.Player) (*pb.Player, error) {
-	r := authRequest{player: p, res: make(chan authResponse)}
-	g.authRequests <- r
+	r := connectRequest{player: p, res: make(chan connectResponse)}
+	g.connectRequests <- r
 	res := <-r.res
 	return res.player, res.err
 }
 
-type authRequest struct {
+type connectRequest struct {
 	player *pb.Player
-	res    chan authResponse
+	res    chan connectResponse
 }
 
-type authResponse struct {
+type connectResponse struct {
 	player *pb.Player
 	err    error
 }
 
-func (g *game) handleAuth(r authRequest) {
+func (g *game) handleConnect(r connectRequest) {
 	defer close(r.res)
 
 	if r.player.GetName() == "" {
-		r.res <- authResponse{err: errEmptyName}
+		r.res <- connectResponse{err: errEmptyName}
 		return
 	}
 	if player := g.findPlayerByName(r.player.GetName()); player != nil {
-		r.res <- authResponse{err: errConnected(r.player.GetName())}
+		r.res <- connectResponse{err: errConnected(r.player.GetName())}
 		return
 	}
 	if g.isStarted() {
-		r.res <- authResponse{err: errStarted}
+		r.res <- connectResponse{err: errStarted}
 		return
 	}
 
@@ -48,7 +48,7 @@ func (g *game) handleAuth(r authRequest) {
 		Name: r.player.GetName(),
 	}
 	g.players[player.Id] = player
-	r.res <- authResponse{player: player}
+	r.res <- connectResponse{player: player}
 
 	for _, notifyPlayerConnected := range g.notifyPlayerConnectedChans {
 		notifyPlayerConnected <- player
