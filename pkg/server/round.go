@@ -8,7 +8,7 @@ import (
 	pb "github.com/movaua/rock-paper-scissors/pkg/rps"
 )
 
-// Round is an API of a single Round of the game.
+// Round is an API of a single round of the game.
 type Round struct {
 	ctx       context.Context
 	cancel    func()
@@ -100,6 +100,7 @@ func (r *Round) getResults() []*pb.RoundResult {
 	return results
 }
 
+// scoreResults calculates a round score for each player.
 func (r *Round) scoreResults() []*pb.RoundResult {
 	scores := make([]*pb.RoundResult, len(r.players))
 

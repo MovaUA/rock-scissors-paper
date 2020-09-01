@@ -2,6 +2,7 @@ package server
 
 import pb "github.com/movaua/rock-paper-scissors/pkg/rps"
 
+// these are the game rules
 var (
 	// key: choice,
 	// value: rule
