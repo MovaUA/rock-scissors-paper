@@ -34,7 +34,7 @@ func (g *Game) handleConnect(r connectRequest) {
 		r.res <- connectResponse{err: errEmptyName}
 		return
 	}
-	if player := g.findPlayerByName(r.player.GetName()); player != nil {
+	if _, ok := g.playerNames[r.player.GetName()]; ok {
 		r.res <- connectResponse{err: errConnected(r.player.GetName())}
 		return
 	}
@@ -48,6 +48,7 @@ func (g *Game) handleConnect(r connectRequest) {
 		Name: r.player.GetName(),
 	}
 	g.players[player.Id] = player
+	g.playerNames[player.Name] = struct{}{}
 	r.res <- connectResponse{player: player}
 
 	for _, notifyPlayerConnected := range g.notifyPlayerConnectedChans {
@@ -57,13 +58,4 @@ func (g *Game) handleConnect(r connectRequest) {
 	if len(g.players) > 1 {
 		g.start()
 	}
-}
-
-func (g *Game) findPlayerByName(name string) *pb.Player {
-	for _, player := range g.players {
-		if player.GetName() == name {
-			return player
-		}
-	}
-	return nil
 }

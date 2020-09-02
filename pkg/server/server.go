@@ -18,6 +18,7 @@ type Game struct {
 	// which causes the game to go into "started" state.
 	start                      func()
 	players                    map[string]*pb.Player // key is player.Id
+	playerNames                map[string]struct{}   // is player.GetName()
 	connectRequests            chan connectRequest
 	playersRequests            chan playersRequest
 	notifyPlayerConnectedChans map[playersRequest]chan *pb.Player
@@ -36,6 +37,7 @@ func NewGame(ctx context.Context, roundTimeout time.Duration) *Game {
 		roundTimeout:               roundTimeout,
 		started:                    started,
 		players:                    make(map[string]*pb.Player, 2),
+		playerNames:                make(map[string]struct{}, 2),
 		connectRequests:            make(chan connectRequest),
 		playersRequests:            make(chan playersRequest),
 		notifyPlayerConnectedChans: make(map[playersRequest]chan *pb.Player, 2),
