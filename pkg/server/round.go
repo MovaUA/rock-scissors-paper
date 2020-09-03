@@ -32,7 +32,7 @@ func NewRound(
 		players:   players,
 		choicesCh: make(chan *pb.Choice, len(players)),
 		choices:   make(map[string]*pb.Choice, len(players)),
-		resultsCh: make(chan []*pb.RoundResult),
+		resultsCh: make(chan []*pb.RoundResult, 1),
 	}
 
 	go r.start()
@@ -53,10 +53,8 @@ func (r *Round) Result() <-chan []*pb.RoundResult {
 // start waits for all players made their choises or round is timed out.
 // Then it reports the result back to game.
 func (r *Round) start() {
-	defer r.cancel()
-
 	r.handleChoises()
-
+	r.cancel()
 	r.resultsCh <- r.getResults()
 	close(r.resultsCh)
 }
