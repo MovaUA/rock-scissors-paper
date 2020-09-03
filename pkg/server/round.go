@@ -27,9 +27,12 @@ func NewRound(
 	ctx, cancel := context.WithTimeout(ctx, timeout)
 
 	r := &Round{
-		ctx:     ctx,
-		cancel:  cancel,
-		players: players,
+		ctx:       ctx,
+		cancel:    cancel,
+		players:   players,
+		choicesCh: make(chan *pb.Choice, len(players)),
+		choices:   make(map[string]*pb.Choice, len(players)),
+		resultsCh: make(chan []*pb.RoundResult),
 	}
 
 	go r.start()
@@ -51,10 +54,6 @@ func (r *Round) Result() <-chan []*pb.RoundResult {
 // Then it reports the result back to game.
 func (r *Round) start() {
 	defer r.cancel()
-
-	r.choicesCh = make(chan *pb.Choice, len(r.players))
-	r.choices = make(map[string]*pb.Choice, len(r.players))
-	r.resultsCh = make(chan []*pb.RoundResult)
 
 	r.handleChoises()
 
