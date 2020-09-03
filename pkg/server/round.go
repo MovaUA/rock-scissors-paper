@@ -27,12 +27,9 @@ func NewRound(
 	ctx, cancel := context.WithTimeout(ctx, timeout)
 
 	r := &Round{
-		ctx:       ctx,
-		cancel:    cancel,
-		players:   players,
-		choicesCh: make(chan *pb.Choice, len(players)),
-		choices:   make(map[string]*pb.Choice, len(players)),
-		resultsCh: make(chan []*pb.RoundResult),
+		ctx:     ctx,
+		cancel:  cancel,
+		players: players,
 	}
 
 	go r.start()
@@ -55,6 +52,10 @@ func (r *Round) Result() <-chan []*pb.RoundResult {
 func (r *Round) start() {
 	defer r.cancel()
 
+	r.choicesCh = make(chan *pb.Choice, len(r.players))
+	r.choices = make(map[string]*pb.Choice, len(r.players))
+	r.resultsCh = make(chan []*pb.RoundResult)
+
 	r.handleChoises()
 
 	r.resultsCh <- r.getResults()
@@ -67,18 +68,21 @@ func (r *Round) handleChoises() {
 	for {
 		select {
 
-		// player made their choise:
+		// handle player's choice:
 		case choise := <-r.choicesCh:
-			// if choise is send by connected player:
-			if _, ok := r.players[choise.GetPlayerId()]; ok {
-				r.choices[choise.GetPlayerId()] = choise
-				// if all players made their choises
-				if len(r.choices) == len(r.players) {
-					return
-				}
+			// reject not connected players:
+			if _, connected := r.players[choise.GetPlayerId()]; !connected {
+				break
 			}
 
-			// timeout expired (or game server is closed):
+			r.choices[choise.GetPlayerId()] = choise
+
+			// complete the round when all players made their choises:
+			if len(r.choices) == len(r.players) {
+				return
+			}
+
+			// compelete the round when timeout expired or game server is closed:
 		case <-r.ctx.Done():
 			return
 		}
