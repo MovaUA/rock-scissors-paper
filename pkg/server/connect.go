@@ -31,15 +31,15 @@ func (g *Game) handleConnect(r connectRequest) {
 	defer close(r.res)
 
 	if r.player.GetName() == "" {
-		r.res <- connectResponse{err: errEmptyName}
+		r.res <- connectResponse{err: errPlayerEmptyName}
 		return
 	}
 	if _, ok := g.playerNames[r.player.GetName()]; ok {
-		r.res <- connectResponse{err: errConnected(r.player.GetName())}
+		r.res <- connectResponse{err: errPlayerConnected(r.player.GetName())}
 		return
 	}
 	if g.isStarted() {
-		r.res <- connectResponse{err: errStarted}
+		r.res <- connectResponse{err: errGameStarted}
 		return
 	}
 
