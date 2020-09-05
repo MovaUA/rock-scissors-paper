@@ -51,7 +51,7 @@ func NewGame(ctx context.Context, roundTimeout time.Duration) *Game {
 		startRequests:              make(map[startRequest]chan<- *pb.Score, 2),
 		cancelStartRequestsCh:      make(chan startRequest),
 		roundResults:               make(chan []*pb.RoundResult),
-		gameResults:                make(map[string]*pb.GameClient, 2),
+		gameResults:                make(map[string]*pb.GameResult, 2),
 	}
 
 	g.start = func() {
