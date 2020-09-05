@@ -8,7 +8,7 @@ import (
 
 func (g *Game) handleRoundResults(roundResults []*pb.RoundResult) {
 	for _, roundResult := range roundResults {
-		gameResult := g.gameResults[roundResult.Player.GetId()]
+		gameResult := g.gameResults[roundResult.Player.Id]
 		gameResult.Rounds++
 		gameResult.Score += roundResult.Score
 	}

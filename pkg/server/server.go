@@ -56,7 +56,7 @@ func NewGame(ctx context.Context, roundTimeout time.Duration) *Game {
 
 	g.start = func() {
 		for _, player := range g.players {
-			g.gameResults[player.GetId()] = &pb.GameResult{
+			g.gameResults[player.Id] = &pb.GameResult{
 				Player: player,
 			}
 		}

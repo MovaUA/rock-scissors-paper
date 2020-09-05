@@ -109,15 +109,15 @@ func (r *Round) scoreResults() []*pb.RoundResult {
 	scores := make([]*pb.RoundResult, len(r.players))
 
 	for _, player := range r.players {
-		choice := r.choices[player.GetId()].GetChoice()
+		choice := r.choices[player.Id].GetChoice()
 		score := int32(0)
 
 		for _, otherPlayer := range r.players {
-			if otherPlayer.GetId() == player.GetId() {
+			if otherPlayer.Id == player.Id {
 				continue
 			}
 
-			otherPlayerChoice := r.choices[otherPlayer.GetId()].GetChoice()
+			otherPlayerChoice := r.choices[otherPlayer.Id].GetChoice()
 			status := GetStatus(choice, otherPlayerChoice)
 
 			score += statusScores[status]
