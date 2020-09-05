@@ -6,6 +6,15 @@ import (
 
 // Start starts the game.
 func (g *Game) Start(stream pb.Game_StartServer) error {
+	scoreCh := make(chan *pb.Score)
+	disconnect := make(chan struct{})
+	defer close(disconnect)
+
+	g.startRequestsCh <- startRequest{
+		scoreCh:    scoreCh,
+		disconnect: disconnect,
+	}
+
 	// wait for the game is started
 	<-g.started.Done()
 
@@ -17,6 +26,8 @@ func (g *Game) Start(stream pb.Game_StartServer) error {
 			c, err := stream.Recv()
 			if err != nil {
 				recvErr <- err
+				close(recvErr)
+				recvErr = nil
 				return
 			}
 			g.round.MakeChoise(c)
@@ -25,7 +36,16 @@ func (g *Game) Start(stream pb.Game_StartServer) error {
 
 	go func() {
 		for {
-
+			select {
+			case s := <-scoreCh:
+				err := stream.Send(s)
+				if err != nil {
+					sendErr <- err
+					close(sendErr)
+					sendErr <- nil
+					return
+				}
+			}
 		}
 	}()
 
@@ -37,4 +57,17 @@ func (g *Game) Start(stream pb.Game_StartServer) error {
 	case <-g.ctx.Done():
 		return g.ctx.Err()
 	}
+}
+
+type startRequest struct {
+	scoreCh    chan<- *pb.Score
+	disconnect <-chan struct{}
+}
+
+func (g *Game) handleStartRequests(r startRequest) {
+	g.startRequests[r] = r.scoreCh
+	go func() {
+		<-r.disconnect
+		g.cancelStartRequestsCh <- r
+	}()
 }

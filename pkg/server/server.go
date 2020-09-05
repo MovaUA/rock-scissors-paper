@@ -25,7 +25,12 @@ type Game struct {
 	unsubscribePlayers         chan playersRequest
 	// round is the current round of the game when it is started.
 	// round is nil until the game is started.ß
-	round *Round
+	round                 *Round
+	startRequestsCh       chan startRequest
+	startRequests         map[startRequest]chan<- *pb.Score
+	cancelStartRequestsCh chan startRequest
+	roundResults          chan []*pb.RoundResult
+	gameResults           map[string]*pb.GameResult //  key is player.Id
 }
 
 // NewGame returns new initialized game server.
@@ -42,10 +47,20 @@ func NewGame(ctx context.Context, roundTimeout time.Duration) *Game {
 		playersRequests:            make(chan playersRequest),
 		notifyPlayerConnectedChans: make(map[playersRequest]chan *pb.Player, 2),
 		unsubscribePlayers:         make(chan playersRequest),
+		startRequestsCh:            make(chan startRequest),
+		startRequests:              make(map[startRequest]chan<- *pb.Score, 2),
+		cancelStartRequestsCh:      make(chan startRequest),
+		roundResults:               make(chan []*pb.RoundResult),
+		gameResults:                make(map[string]*pb.GameClient, 2),
 	}
 
 	g.start = func() {
-		g.round = NewRound(g.ctx, g.roundTimeout, g.players)
+		for _, player := range g.players {
+			g.gameResults[player.GetId()] = &pb.GameResult{
+				Player: player,
+			}
+		}
+		g.round = NewRound(g.ctx, g.roundTimeout, g.players, g.roundResults)
 		start()
 	}
 
@@ -65,6 +80,15 @@ func (g *Game) handleRequests() {
 
 		case r := <-g.unsubscribePlayers:
 			delete(g.notifyPlayerConnectedChans, r)
+
+		case r := <-g.startRequestsCh:
+			g.handleStartRequests(r)
+
+		case r := <-g.cancelStartRequestsCh:
+			delete(g.startRequests, r)
+
+		case r := <-g.roundResults:
+			g.handleRoundResults(r)
 
 		case <-g.ctx.Done():
 		}

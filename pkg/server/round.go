@@ -10,12 +10,13 @@ import (
 
 // Round is an API of a single round of the game.
 type Round struct {
+	parentCtx context.Context
 	ctx       context.Context
-	cancel    func()
+	timeout   time.Duration
 	players   map[string]*pb.Player // key is player.Id
 	choicesCh chan *pb.Choice
 	choices   map[string]*pb.Choice // key is player.Id
-	resultsCh chan []*pb.RoundResult
+	results   chan []*pb.RoundResult
 }
 
 // NewRound return new started round of the game.
@@ -23,16 +24,15 @@ func NewRound(
 	ctx context.Context,
 	timeout time.Duration,
 	players map[string]*pb.Player,
+	results chan []*pb.RoundResult,
 ) *Round {
-	ctx, cancel := context.WithTimeout(ctx, timeout)
-
 	r := &Round{
-		ctx:       ctx,
-		cancel:    cancel,
+		parentCtx: ctx,
+		timeout:   timeout,
 		players:   players,
+		results:   results,
 		choicesCh: make(chan *pb.Choice, len(players)),
 		choices:   make(map[string]*pb.Choice, len(players)),
-		resultsCh: make(chan []*pb.RoundResult, 1),
 	}
 
 	go r.start()
@@ -45,23 +45,26 @@ func (r *Round) MakeChoise(c *pb.Choice) {
 	r.choicesCh <- c
 }
 
-// Result returns a chan with round results.
-func (r *Round) Result() <-chan []*pb.RoundResult {
-	return r.resultsCh
-}
-
 // start waits for all players made their choises or round is timed out.
-// Then it reports the result back to game.
+// Then it repots round results to channel.
 func (r *Round) start() {
-	r.handleChoises()
-	r.cancel()
-	r.resultsCh <- r.getResults()
-	close(r.resultsCh)
+	for {
+		for _, choice := range r.choices {
+			choice.Choice = pb.EnumChoice_UnknownChoice
+		}
+
+		ctx, cancel := context.WithTimeout(r.parentCtx, r.timeout)
+
+		r.handleChoises(ctx)
+		cancel()
+
+		r.results <- r.getResults()
+	}
 }
 
 // handleChoises returns when all players have made their choises
 // or when timeout is expired.
-func (r *Round) handleChoises() {
+func (r *Round) handleChoises(ctx context.Context) {
 	for {
 		select {
 
@@ -80,7 +83,7 @@ func (r *Round) handleChoises() {
 			}
 
 			// compelete the round when timeout expired or game server is closed:
-		case <-r.ctx.Done():
+		case <-ctx.Done():
 			return
 		}
 	}
