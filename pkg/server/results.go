@@ -13,7 +13,7 @@ func (g *Game) handleRoundResults(roundResults []*pb.RoundResult) {
 		gameResult.Score += roundResult.Score
 	}
 
-	gameResults := make([]*pb.GameResult, len(g.gameResults))
+	gameResults := make([]*pb.GameResult, 0, len(g.gameResults))
 	for _, gameResult := range g.gameResults {
 		gameResults = append(gameResults, gameResult)
 	}

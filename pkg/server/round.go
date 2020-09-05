@@ -106,7 +106,7 @@ func (r *Round) getResults() []*pb.RoundResult {
 
 // scoreResults calculates a round score for each player.
 func (r *Round) scoreResults() []*pb.RoundResult {
-	scores := make([]*pb.RoundResult, len(r.players))
+	scores := make([]*pb.RoundResult, 0, len(r.players))
 
 	for _, player := range r.players {
 		choice := r.choices[player.Id].GetChoice()
